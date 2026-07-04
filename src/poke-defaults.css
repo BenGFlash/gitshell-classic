@@ -1,0 +1,118 @@
+/* Poke default style: Exposure display + OpenRunde text + Poke backgrounds. Keep this file. */
+@font-face {
+  font-family: "Exposure";
+  src: url("/fonts/Exposure-205TF-VAR.woff2") format("woff2");
+  font-style: normal;
+}
+@font-face {
+  font-family: "Exposure";
+  src: url("/fonts/Exposure-205TF-VAR-Italic.woff2") format("woff2");
+  font-style: italic;
+}
+@font-face {
+  font-family: "OpenRunde";
+  src: url("/fonts/OpenRunde-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "OpenRunde";
+  src: url("/fonts/OpenRunde-Medium.woff2") format("woff2");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+}
+:root {
+  color-scheme: dark;
+  --surface: #050505;
+  --ink: #00ff41;
+  --muted: #00f0ff;
+  --line: rgba(0, 255, 65, 0.16);
+  --accent: #bf00ff;
+}
+.dark {
+  --surface: #050505;
+  --ink: #00ff41;
+  --muted: #00f0ff;
+  --line: rgba(0, 255, 65, 0.16);
+  --accent: #bf00ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --surface: #050505;
+    --ink: #00ff41;
+    --muted: #00f0ff;
+    --line: rgba(0, 255, 65, 0.16);
+    --accent: #bf00ff;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --surface: #050505;
+    --ink: #00ff41;
+    --muted: #00f0ff;
+    --line: rgba(0, 255, 65, 0.16);
+    --accent: #bf00ff;
+  }
+}
+/* Type scale + font families — use these instead of ad-hoc text-[..px]/font-[..] values. */
+@theme {
+  --font-sans: "OpenRunde", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --text-eyebrow: 13px;
+  --text-eyebrow--line-height: 1.5;
+  --text-meta: 12px;
+  --text-meta--line-height: 1.2;
+  --text-label: 15px;
+  --text-label--line-height: 1.2;
+  --text-body: 15px;
+  --text-body--line-height: 1.6;
+  --text-heading: 18px;
+  --text-heading--line-height: 1.4;
+  --text-name: 24px;
+  --text-name--line-height: 1.3;
+}
+html {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  background: var(--surface);
+  color: var(--ink);
+  overscroll-behavior: none;
+}
+h1 {
+  font-family: "Exposure", "OpenRunde", sans-serif;
+  font-weight: 500;
+  font-variation-settings: "EXPO" -10;
+  line-height: 1.2;
+  text-wrap: pretty;
+}
+h2, h3 {
+  font-family: "OpenRunde", system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+/* Display face for non-heading display text (stat numbers, pull quotes). Use only at >= 24px / text-name. */
+.font-display {
+  font-family: "Exposure", "OpenRunde", sans-serif;
+  font-weight: 500;
+  font-variation-settings: "EXPO" -10;
+}
+h4, h5, h6 {
+  font-family: "OpenRunde", system-ui, sans-serif;
+  font-weight: 500;
+  text-wrap: pretty;
+}
+a[href],
+button:not(:disabled),
+[role="button"]:not(:disabled),
+[role="link"],
+label[for],
+select:not(:disabled),
+summary {
+  cursor: pointer;
+}
+code, pre, kbd, samp {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}

@@ -1,0 +1,48 @@
+@import "./poke-defaults.css";
+
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: #00ff41;
+}
+
+/* Custom scrollbar for terminal */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.2);
+  border-radius: 2px;
+}
+
+/* Glow text utility */
+.text-glow-green {
+  text-shadow: 0 0 7px rgba(0, 255, 65, 0.6), 0 0 21px rgba(0, 255, 65, 0.3);
+}
+.text-glow-cyan {
+  text-shadow: 0 0 7px rgba(0, 240, 255, 0.6), 0 0 21px rgba(0, 240, 255, 0.3);
+}
+.text-glow-purple {
+  text-shadow: 0 0 7px rgba(191, 0, 255, 0.6), 0 0 21px rgba(191, 0, 255, 0.3);
+}
+
+/* Poke page anchor — keep LAST in this file so it wins over the token block above. */
+:root, .dark {
+  --background: #050505;
+  --foreground: #00ff41;
+}
