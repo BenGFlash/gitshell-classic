@@ -1,4 +1,4 @@
-import { getAuthedUser, getToken, setToken, getRepos, getBranches, deleteBranch, getWorkflowRuns, getRunLogs } from "./github";
+import { getAuthedUser, getToken, setToken, clearToken, getRepos, getBranches, deleteBranch, getWorkflowRuns, getRunLogs } from "./github";
 
 export interface OutputLine {
   text: string;
@@ -48,6 +48,7 @@ const HELP_TEXT: OutputLine[] = [
   ok("  Available commands:"),
   ok(""),
   ok("    auth <token>        Save your GitHub PAT to this session"),
+  ok("    auth clear           Remove the saved token from storage"),
   ok(""),
   ok("    repos               List your GitHub repositories"),
   ok(""),
@@ -84,7 +85,11 @@ async function cmdHelp(): Promise<CommandResult> {
 
 async function cmdAuth(args: string[]): Promise<CommandResult> {
   if (args.length === 0) {
-    return { lines: [err("Usage: auth <personal-access-token>")] };
+    return { lines: [err("Usage: auth <personal-access-token> or auth clear")] };
+  }
+  if (args[0] === "clear") {
+    clearToken();
+    return { lines: [ok("Token cleared.")] };
   }
   setToken(args[0]);
   return { lines: [ok("Token saved. Run whoami to verify.")] };
@@ -93,7 +98,18 @@ async function cmdAuth(args: string[]): Promise<CommandResult> {
 async function cmdWhoami(): Promise<CommandResult> {
   try {
     const user = await getAuthedUser();
-    return { lines: [ok(`Authenticated as ${user.login}`)] };
+    return {
+      lines: [
+        ok(`Authenticated as ${user.login}`),
+        ok(""),
+        ok(`  User:      ${user.login}`),
+        ok(`  Name:      ${user.name || "(no name set)"}`),
+        ok(`  Repos:     ${user.public_repos}`),
+        ok(`  Followers: ${user.followers}`),
+        ok(`  Following: ${user.following}`),
+        ok(`  URL:       ${user.html_url}`),
+      ]
+    };
   } catch (e) {
     return { lines: [err(`Auth failed: ${e instanceof Error ? e.message : "unknown error"}`)] };
   }

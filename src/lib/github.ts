@@ -10,7 +10,15 @@ export function getToken(): string | null {
 }
 
 export function setToken(t: string): void {
-  localStorage.setItem("gitshell_token", t);
+  if (t) {
+    localStorage.setItem("gitshell_token", t);
+  } else {
+    localStorage.removeItem("gitshell_token");
+  }
+}
+
+export function clearToken(): void {
+  localStorage.removeItem("gitshell_token");
 }
 
 function headers(): Record<string, string> {
@@ -38,7 +46,14 @@ async function fetchJson<T>(endpoint: GhEndpoint): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export function getAuthedUser(): Promise<{ login: string }> {
+export function getAuthedUser(): Promise<{
+  login: string;
+  name: string | null;
+  public_repos: number;
+  followers: number;
+  following: number;
+  html_url: string;
+}> {
   return fetchJson({ url: "https://api.github.com/user" });
 }
 
