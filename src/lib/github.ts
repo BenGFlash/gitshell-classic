@@ -61,6 +61,10 @@ export function getRepos(): Promise<{ name: string; full_name: string; descripti
   return fetchJson({ url: "https://api.github.com/user/repos?per_page=100&sort=updated" });
 }
 
+export function getUserRepos(username: string): Promise<{ name: string; full_name: string; description: string | null; private: boolean; updated_at: string; fork: boolean }[]> {
+  return fetchJson({ url: `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated&type=all` });
+}
+
 export function getBranches(owner: string, repo: string): Promise<{ name: string; commit: { sha: string } }[]> {
   return fetchJson({ url: `https://api.github.com/repos/${owner}/${repo}/branches?per_page=100` });
 }

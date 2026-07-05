@@ -1,4 +1,4 @@
-import { getAuthedUser, getToken, setToken, clearToken, getRepos, getBranches, deleteBranch, getWorkflowRuns, getRunLogs } from "./github";
+import { getAuthedUser, getToken, setToken, clearToken, getRepos, getUserRepos, getBranches, deleteBranch, getWorkflowRuns, getRunLogs } from "./github";
 
 export interface OutputLine {
   text: string;
@@ -51,6 +51,7 @@ const HELP_TEXT: OutputLine[] = [
   ok("    auth clear           Remove the saved token from storage"),
   ok(""),
   ok("    repos               List your GitHub repositories"),
+  ok("    repos <username>    List a user's public repositories"),
   ok(""),
   ok("    branches <repo>     List branches of a repository"),
   ok("                        Usage: branches owner/repo-name"),
@@ -115,9 +116,12 @@ async function cmdWhoami(): Promise<CommandResult> {
   }
 }
 
-async function cmdRepos(): Promise<CommandResult> {
+async function cmdRepos(args: string[]): Promise<CommandResult> {
   try {
-    const repos = await getRepos();
+    const username = args.length > 0 ? args[0] : null;
+    const repos = username
+      ? await getUserRepos(username)
+      : await getRepos();
     if (repos.length === 0) return { lines: [ok("No repositories found.")] };
     const lines: OutputLine[] = [
       sys(`  ${"REPOSITORY".padEnd(40)} ${"VISIBILITY".padEnd(12)} UPDATED`),
@@ -125,7 +129,7 @@ async function cmdRepos(): Promise<CommandResult> {
     ];
     for (const r of repos) {
       const name = r.full_name.padEnd(40);
-      const vis = (r.private ? "private" : "public").padEnd(12);
+      const vis = (r.private && !username ? "private" : "public").padEnd(12);
       lines.push(ok(`  ${name}${vis}${fmtDate(r.updated_at)}`));
     }
     lines.push(ok(`\n  ${repos.length} repo(s)`));
